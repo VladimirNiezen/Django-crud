@@ -42,14 +42,16 @@ def signup (request):
 def tasks (request ):
     tasks = Task.objects.filter(user = request.user, datacompleted__isnull = True)
     return render (request, 'tasks/tasks.html',{
-        'tasks' : tasks
+        'tasks' : tasks ,
+        'completed' : False
     })
 
 @login_required
 def tasks_completed (request ):
     tasks = Task.objects.filter(user = request.user, datacompleted__isnull = False).order_by ('-datacompleted')
     return render (request, 'tasks/tasks.html',{
-        'tasks' : tasks
+        'tasks' : tasks,
+        'completed' : True
     })
 
 @login_required

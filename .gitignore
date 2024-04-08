@@ -1,4 +1,5 @@
 # created by virtualenv automatically#
 env2/
-_pycache_/
+*tasks/_pycache_/
+*djangocrud/_pycache_/
 *.sqlite3

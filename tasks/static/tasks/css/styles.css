@@ -1,0 +1,20 @@
+body {
+    background-image: url("/static/tasks/img/home_background.jpg");
+    background-size: cover;
+    color: #120e19;
+}
+
+.bg-custom-vlad{
+    background-color :  #120e19;
+    color: white;
+} 
+
+.bg-custom-btn{
+    background-color : whitesmoke;
+    color:#120e19;
+    
+} 
+.bg-custom-btn:hover{
+    background-color: gray;
+    transform: scale(1.1);
+}

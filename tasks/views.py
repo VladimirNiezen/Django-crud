@@ -64,9 +64,17 @@ def create_task (request ):
         try:
             form = TaskForm(request.POST)
             new_task = form.save(commit= False)
+            new_task.title = new_task.clean_spaces(new_task.title)
             new_task.user = request.user
-            new_task.save()
-            return redirect ('tasks')
+            duplicated=  new_task.title_is_duplicated(new_task.title,new_task.user) 
+            if duplicated :
+                return render (request, 'tasks/create_task.html',{
+                'form' : TaskForm,
+                'error': 'The Task-title already exists'
+                })
+            else:
+                new_task.save()
+                return redirect ('tasks')
         except ValueError:
             return render (request, 'tasks/create_task.html',{
             'form' : TaskForm,
@@ -91,15 +99,7 @@ def task_detail(request,task_id):
             old_task.description = update_task.description
             old_task.important = update_task.important
             old_task.save()
-            #update_task.save()
-            #update_task.title = request.POST['title']
-            #update_task.description = request.POST['description']
-            #update_task.important = True if request.POST['important'] == 'on' else False
-            #new_task.save()
-            print(update_task.title)
-            print(update_task.important)
-            print(update_task.description)
-            print(request.POST)
+            print(old_task.datacompleted)
             return redirect('tasks')
         except ValueError:
             task = get_object_or_404 (Task,pk=task_id)
@@ -115,7 +115,9 @@ def complete_task (request,task_id):
      task = get_object_or_404(Task, pk =task_id , user = request.user)
      if request.method == 'POST':
         task.datacompleted = timezone.now()
+        print(task.title)
         task.save()
+        print(task)
         return redirect('tasks')
 
 @login_required

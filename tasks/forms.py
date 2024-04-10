@@ -10,4 +10,6 @@ class TaskForm (forms.ModelForm):
             'description' : forms.Textarea(attrs={'class' : 'form-control', 'placeholder' : 'Write a description' }),
             'important' : forms.CheckboxInput(attrs={'class' : 'form-chech-input m-auto'}),
         }
+
+    
         

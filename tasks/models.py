@@ -18,12 +18,12 @@ class Task(models.Model):
         duplicated = Task.objects.filter(title=title,user=user).exists()
         return duplicated
     
-    def clean_spaces(self,title):
-        pattern1 = r"^\s{1,}|\s{1,}$"
-        pattern2 = r"\s{2,}"
-        result = re.sub (pattern1,"", title)
-        result = re.sub (pattern2," ", title)
-        return result
+def clean_spaces(title):
+    pattern1 = r"^\s{1,}|\s{1,}$"
+    pattern2 = r"\s{2,}"
+    result = re.sub (pattern1,"", title)
+    result = re.sub (pattern2," ", title)
+    return result
     
 
 

@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.contrib.auth import login , logout , authenticate
 from django.db import IntegrityError
 from .forms import TaskForm
-from .models import Task
+from .models import Task , clean_spaces
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 
@@ -38,6 +38,7 @@ def signup (request):
                     'error' : 'Password do not match'
                 })
 
+
 @login_required
 def tasks (request ):
     tasks = Task.objects.filter(user = request.user, datacompleted__isnull = True)
@@ -46,6 +47,7 @@ def tasks (request ):
         'completed' : False
     })
 
+
 @login_required
 def tasks_completed (request ):
     tasks = Task.objects.filter(user = request.user, datacompleted__isnull = False).order_by ('-datacompleted')
@@ -53,6 +55,7 @@ def tasks_completed (request ):
         'tasks' : tasks,
         'completed' : True
     })
+
 
 @login_required
 def create_task (request ):
@@ -64,7 +67,7 @@ def create_task (request ):
         try:
             form = TaskForm(request.POST)
             new_task = form.save(commit= False)
-            new_task.title = new_task.clean_spaces(new_task.title)
+            new_task.title = clean_spaces(new_task.title)
             new_task.user = request.user
             duplicated=  new_task.title_is_duplicated(new_task.title,new_task.user) 
             if duplicated :
@@ -81,11 +84,13 @@ def create_task (request ):
             'error': 'Please validate data'
         })
 
+
 @login_required
 def task_detail(request,task_id):
     if request.method == 'GET': 
         task = get_object_or_404 (Task,pk=task_id , user = request.user)
         form = TaskForm(instance=task)
+        print(task.datacompleted)
         return render (request, 'tasks/task_detail.html',{
             'task' : task ,
             'form' : form
@@ -150,6 +155,5 @@ def signin(request):
         else:
             login(request,user)
             return redirect('tasks')
-
 
 
